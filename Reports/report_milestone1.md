@@ -17,8 +17,8 @@ Due to the branch protection settings we put in place in our repository, it is n
 `git status`
 
 Since this is our first commit, we should still be on the main branch. Next, we create a new branch (called `add-python-file`) where we add the code:
-`git checkout -b add-python-file`
-
+`git checkout -b add-python-file`. With the code `git checkout <branch-name>` we are able to switch between our branches and with `git branch` we are able to see all our local branches. The one activated is marked with a *.
+ 
 It is now possible to download the code file directly form GitHub via:
 `wget https://raw.githubusercontent.com/keras-team/keras-io/master/examples/vision/mnist_convnet.py`
 
@@ -64,21 +64,34 @@ To upload the file from the local repository to GitHub, we use the following com
 `git push origin add-python-file`
 
 If the operation was successful, the changes appear on GitHub under the newly crated branch. From there, we opened a pull request to propose merging the changes into the *main* branch and review them before approval.
+After having approved the changes, the feature branch must be merged into the *main* branch, otherwise the main-branch stays unaffected. Afterwards the feature branch could be deleted.
+
 
 ## 4 - Run the Code
-Explain in detail which steps were necessary to run the code. How did you install Python?
+### Explain in detail which steps were necessary to run the code. How did you install Python?
 Since we are working with Linux it was not nessessary to install Python as it comes pre-installed. Nevertheless, we check the exact Python version using `python3 --version`. In our case, it is version 3.10.
 
 Before running the code it was nessessary to create a virtual environment. This ensures that the projects runs in an isolated enivromnet where the nessessary dependencies can be managed seperatly. This is helpful to avoid conflicts with packages used in other projects because different projects could potentially use different versions of the same package. Furthermore the virtual environment helps to keep an overview which packages are used for which projects.
 
 This is done by creating a .venv folder on the local repository with `python3 -m venv .venv`.
-After having activated the virtual environment with (`source .venv/bin/activate`) the next mandatory step was to install the required packages/dependencies.
+After having activated the virtual environment with (`source .venv/bin/activate`) the next mandatory step was to install the required packages/dependencies. Since the virtual environment folder should be versioned, we excluded the folder by creating a gitignore and adding the .venv folder to it with `echo ".venv/" > .gitignore`.
+
+Before being able to install the correct packages, we had to ensure that we have pip installed with `pip version`. Since pip was not installed, we had to do so my running: `sudo apt install python3-pip -y`. After installing the required packages  `pip install <packagename>` I had to rename the python file with `mv keras.py mnist_convnet.py` because there were some conficts since the python file cannot have the same name as one of the packages.
+Eventually were able to run the python code with `python mnist_convnet.py`
+
+### Find out what versions are being used to run the code
+To find out what dependencies are used we run the command `pip freeze > requirements.txt`
 These include
-    - numpy = 3.12.0
-    - keras = 3.12.0
-    - keras requires TensorFlow = 2.20.0
+- numpy = 3.12.0
+- keras = 3.12.0
+- keras requires TensorFlow = 2.20.0
 
 These three dependencies depend on other packages. The full list can be seen under "requirements.txt".
+
+### Are the versions dependent on the system the code is being run on?
+To run the code on other systems, the correct versions of the dependencies must be installed. This can be done with `pip install -r requirements.txt`. Furthermore, it is recommended that on each machine a virtual environment is set up, to avoid the conflicts explained above.
+If the python-file works with file paths, it is important that the paths are defined with `pathlib` since Windows and Mac / Linux use different path seperators. This is however not that important this time, because no paths are used in the python file.
+
 
 ## 5 - Understand the Code
 ### Input and Output
@@ -107,7 +120,11 @@ Keras built a convolutional neural network (CNN). It consists of:
 - `Dropout` layer for regularization
 - `Dense softmax` layer with 10 outputs for classification
 
-After this, the model begins training for 15 epochs with a batch size of 128 using the `Adam` optimizer and `categorical crossentropy` loss. Running the code reveals that the model came up with almost 35'92000 parameters.
+The first two try to find pattens in the images. The `Dropout` layer prevents over-fitting by turning off some neurons during the training and therefor forcing the network to use different neurons.
+The `Dense softmax` converts the output values into probabilities. Basically, the model "votes" on how confident it is, for each of the 10 different digits. The one with the highest percentages will be the answer of the model.
+
+The model begins training for 15 epochs with a batch size of 128 using the `Adam` optimizer and `categorical crossentropy` loss. With each round the model improves based on what it learned in the previous round.
+Running the code reveals that the model came up with about 35'000 parameters.
 
 The expected final test accuracy is ~ 99%, which matches the observed results:
 - Test loss: 0.02
@@ -118,3 +135,10 @@ Handwritten digits vary in style, thickness, and orientation. Simple rule-based 
 
 ## 6 - Project Documentation
 The `README` file was created directly on GitHub at the time the repository was initially set up.
+
+### 8 - Report Submission
+A new folder named *Reports* was created by using `mkdir Reports`. Inside this folder we used `touch report_milestone1.md` to generate the markdown file.
+To edit the markdown file, we can either use `vim report_milestone1.md` or if we want to use a different editor such as VS-Code we can use `code report_milestone1.md`. For this last command to work, it must correctly be set up in VS Code by entering the command `shell` and selecting `Shell Command: Install 'code' command in PATH`.
+
+
+

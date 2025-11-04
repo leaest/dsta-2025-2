@@ -1,1 +1,19 @@
-# dsta-2025-2
+# Documentation File
+
+Note: This documentation is intended for Linux and macOS systems.
+
+To run the code, please follow the steps below:
+
+## Cloning the GithHub Repo to Local Machine
+- Copy either the SSH or HTTPS url from GitHub
+- Navigate to the folder you want to clone the repo and enter: `git clone <copied repo-url>`
+
+## Setting up Virtual Environment and Dependencies
+- To create the virtual environment enter:  `python3 -m venv .venv`
+- To start the virtual environment enter: `source .venv/bin/activate`
+- (If necessary install pip with: `sudo apt install python3-pip -y`)
+- Installing all dependencies: `pip install -r requirements.txt`
+
+## Running the Code
+- To run the code enter: `python mnist_convnet.py`
+
