@@ -123,8 +123,8 @@ Keras built a convolutional neural network (CNN). It consists of:
 The first two try to find pattens in the images. The `Dropout` layer prevents over-fitting by turning off some neurons during the training and therefor forcing the network to use different neurons.
 The `Dense softmax` converts the output values into probabilities. Basically, the model "votes" on how confident it is, for each of the 10 different digits. The one with the highest percentages will be the answer of the model.
 
-The model begins training for 15 epochs with a batch size of 128 using the `Adam` optimizer and `categorical crossentropy` loss. With each round the model improves based on what in learned in the previous round.
-Running the code reveals that the model came up with almost 35'92000 parameters.
+The model begins training for 15 epochs with a batch size of 128 using the `Adam` optimizer and `categorical crossentropy` loss. With each round the model improves based on what it learned in the previous round.
+Running the code reveals that the model came up with about 35'000 parameters.
 
 The expected final test accuracy is ~ 99%, which matches the observed results:
 - Test loss: 0.02
@@ -136,7 +136,7 @@ Handwritten digits vary in style, thickness, and orientation. Simple rule-based 
 ## 6 - Project Documentation
 The `README` file was created directly on GitHub at the time the repository was initially set up.
 
-### 8
+### 8 - Report Submission
 A new folder named *Reports* was created by using `mkdir Reports`. Inside this folder we used `touch report_milestone1.md` to generate the markdown file.
 To edit the markdown file, we can either use `vim report_milestone1.md` or if we want to use a different editor such as VS-Code we can use `code report_milestone1.md`. For this last command to work, it must correctly be set up in VS Code by entering the command `shell` and selecting `Shell Command: Install 'code' command in PATH`.
 
