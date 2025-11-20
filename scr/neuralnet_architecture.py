@@ -1,8 +1,8 @@
 import keras
 from keras import layers
 
+
 def build_neuralnet(input_shape=(28, 28, 1), num_classes=10):
-    
     model = keras.Sequential(
         [
             keras.Input(shape=input_shape),
@@ -12,8 +12,7 @@ def build_neuralnet(input_shape=(28, 28, 1), num_classes=10):
             layers.MaxPooling2D(pool_size=(2, 2)),
             layers.Flatten(),
             layers.Dropout(0.5),
-            layers.Dense(num_classes, activation="softmax")
+            layers.Dense(num_classes, activation="softmax"),
         ]
     )
-
     return model
