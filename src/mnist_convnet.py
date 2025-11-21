@@ -14,6 +14,8 @@ Accelerator: GPU
 import numpy as np
 import keras
 from keras import layers
+from keras.models import load_model
+
 
 """
 ## Prepare the data
@@ -78,3 +80,38 @@ model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_spl
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
+
+
+# What follows contains the additions for Milestone 2, Task 3
+"""
+## Save the trained model
+"""
+
+path = "../models/CNN_model_mnist.keras"
+model.save(path)
+
+print(f"Model saved successfully at: {path}")
+
+"""
+## Load the trained model
+"""
+
+loaded_model = load_model(path)
+
+print("Model loaded successfully!")
+
+"""
+## Predict
+"""
+
+sample = x_test[:10]
+pred = model.predict(sample)
+
+pred_class = np.argmax(pred, axis=1)
+true_class = np.argmax(y_test[:10], axis=1)
+
+table = np.column_stack((pred_class, true_class))
+
+print("Pred.  True")
+print(table)
+
