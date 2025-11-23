@@ -22,6 +22,7 @@ model.summary()
 
 # Train model
 model = train_neuralnet(model, x_train, y_train)
+print("Model trained successfully!")
 
 
 ## Evaluate trained model
@@ -31,14 +32,16 @@ print("Test accuracy:", score[1])
 
 
 # Save model
-path = "models/CNN_model.keras"
-save_model(model, path)
-print(f"Model saved successfully at: {path}")
+# Change path with: path = "models/Name_your_model.keras"
+# and save_model(model, path)
+save_model(model)
+print("Model saved successfully!")
 
 
 # Load model
-model = load_trained_model(path)
-print(f"Model loaded successfully from: {path}")
+# Changed path: load_trained_model(path)
+model = load_trained_model()
+print("Model loaded successfully!")
 
 
 # Predict
