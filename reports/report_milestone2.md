@@ -133,3 +133,9 @@ Before being able to install the correct packages, check if (the newest version 
 - So if later someone else has to install the correct versions of all the packages they can just run `pip install -r requirements.txt`
 
 ## 6 - Dockerization
+
+### Installing Docker
+There are two ways to install Docker.
+The easier of the two when working on a Windows machine is, to download [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/) and enable the WSL2 integration for your WSL Distro (in my case Ubuntu) inside the program. When I ran `docker version` in the terminal, I received a error message because Docker needs sudo (admin rights). Instead of always using `sudo` in front of every docker command, it is possible to create a group for users that have the right to use docker, without the `sudo`. This is not only more efficient when it comes to typing but it also is safer because it only grants the users of the group root access to Docker but not the full system. The code for creating a group and adding the current user to it is `sudo usermod -aG docker $USER`. Afterwards the WSL terminal has to be restarted. You can check the groups you are in with `groups`. 
+
+### Creating a dockerignore file
