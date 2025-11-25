@@ -132,10 +132,36 @@ Before being able to install the correct packages, check if (the newest version 
 - to create a requirements file that lists all the versions of the package use  `pip freeze > requirements.txt`
 - So if later someone else has to install the correct versions of all the packages they can just run `pip install -r requirements.txt`
 
+To get the SHA-256 hashes for the installed packages the packages have to be downloaded (not installed) and then for each of the package files the following code has to be run for each of them (with the virtual environment activated): `sha256sum <package-file>` To remove all these files I used `rm *.whl`. These hashes can be compared with the official release notes.
+
+The SHA-256 codes for our packages are the following:
+
+|Package Name|Version|SHA-256|
+|---|---|---|
+|numpy|2.2.6|fc7b73d02efb0e18c000e9ad8b83480dfcd5dfd11065997ed4c6747470ae8915|
+|keras|3.12.0|02b69e007d5df8042286c3bcc2a888539e3e487590ffb08f6be1b4354df50aa8|
+|tensorflow|2.20.0|7abd7f3a010e0d354dc804182372779a722d474c4d8a3db8f4a3f5baef2a591e|
+
+
 ## 6 - Dockerization
 
 ### Installing Docker
-There are two ways to install Docker.
-The easier of the two when working on a Windows machine is, to download [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/) and enable the WSL2 integration for your WSL Distro (in my case Ubuntu) inside the program. When I ran `docker version` in the terminal, I received a error message because Docker needs sudo (admin rights). Instead of always using `sudo` in front of every docker command, it is possible to create a group for users that have the right to use docker, without the `sudo`. This is not only more efficient when it comes to typing but it also is safer because it only grants the users of the group root access to Docker but not the full system. The code for creating a group and adding the current user to it is `sudo usermod -aG docker $USER`. Afterwards the WSL terminal has to be restarted. You can check the groups you are in with `groups`. 
+There are different ways to install Docker.
+The  is, to download [Docker Windows](https://docs.docker.com/desktop/setup/install/windows-install/) and enable the WSL2 integration for your WSL Distro (in my case Ubuntu) inside the program (when you are on a WSL machine). When I ran `docker version` in the terminal, I received a error message because Docker needs sudo (admin rights). Instead of always using `sudo` in front of every docker command, it is possible to create a group for users that have the right to use docker, without the `sudo`. This is not only more efficient when it comes to typing but it also is safer because it only grants the users of the group root access to Docker but not the full system. The code for creating a group and adding the current user to it is `sudo usermod -aG docker $USER`. Afterwards the WSL terminal has to be restarted. You can check the groups you are in with `groups`. 
 
 ### Creating a dockerignore file
+Before creating the dockerfile, we create a dockerignore file that ensures that only the necessary folder are used to create the docker image. The docker file is created in the root folder of the project with the command `touch .dockerignore`. I excluded all files related to git, files that relate to docker itself, virtual environment folders, any temporary files as well as the reports-folder and the README.md since these are not required for the image to run correctly.
+
+### Creating a Dockerfile
+The dockerfile provides instructions on how to create a docker image.
+1. The appropriate python version is installed. To do so we use the docker python image: 3.10-slim because it is smaller and therefor faster downloaded than the normal 3.10 and it does support all the required packages as opposed to python-3.10-alpine for example.
+2. The  directory inside the container is specified. Copied files will be saved here.
+3. The requirements file is loaded and then all the dependencies from the requirement file are installed.
+4. The rest of the files is copied inside the image.
+5. The volume, so the folder outside the docker container where the files (in our case the .keras file for the neural network ist stored), is defined.
+6. The `main.py` ist run as soon as the container is started.
+
+### Creating the Docker image and running the container
+The image of the application is created by running the code `docker build -t dsta-ms2 .` The "dsta-ms2" can be replaced by whatever name the docker container should have. 
+Now the docker container can be run using `docker run --rm dsta-ms2`. The neural network code will automatically be run and in the end 10 predictions will be printed in the terminal. This will work on any system, as long as docker is installed.
+
