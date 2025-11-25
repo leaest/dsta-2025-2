@@ -17,3 +17,8 @@ To run the code, please follow the steps below:
 ## Running the Code
 - To run the code enter: `python mnist_convnet.py`
 
+## Using Docker
+If you instead prefer to run the code through Docker, which ensures that it will work on any machine, install Docker from the web, if you have not already. 
+Inside the github repo run the following codes_
+- `docker build -t dsta-ms2 .` to build the image
+- `docker run --rm dsta-ms2` to run said docker container
