@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ms3user
+      POSTGRES_PASSWORD: ms3password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  trainer:
+    build: ./modeltrainer     # <-- NEW NAME
+    volumes:
+      - model_data:/app/models
+
+  app:
+    build: ./app
+    depends_on:
+      - db
+      - trainer
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ms3user
+      DB_PASSWORD: ms3password
+    volumes:
+      - model_data:/app/models:ro
+
+volumes:
+  db_data:
+  model_data:
