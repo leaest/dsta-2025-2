@@ -5,6 +5,7 @@ from PIL import Image
 import io
 
 
+# Load mnist 
 num_classes = 10
 input_shape = (28, 28, 1)
 
@@ -14,17 +15,29 @@ x_test = x_test.astype("float32") / 255
 x_test = np.expand_dims(x_test, -1)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
-sample_image = x_test[50]
-sample_label = y_test[50]
+# Sample
+num_sample = 50
+image_list = []
+label_list = []
 
-img = Image.fromarray((sample_image.squeeze() * 255).astype(np.uint8))
-buffer = io.BytesIO()
-img.save(buffer, format="PNG")
-image_bytes = buffer.getvalue()
+for i in range(num_sample):
+    sample_image = x_test[i]
+    sample_label = y_test[i]
 
+    # Convert normalized image back to 0–255
+    img = Image.fromarray((sample_image.squeeze() * 255).astype(np.uint8))
 
-image_data = (sample_image * 255).astype(np.uint8).tobytes()
-label_data = np.argmax(sample_label)
+    # Save to PNG bytes
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    image_bytes = buffer.getvalue()
+
+    # Convert one-hot to integer label
+    label_int = np.argmax(sample_label)
+
+    image_list.append(image_bytes)
+    label_list.append(label_int)
+
 
 # Connect to database (default)
 with psycopg.connect(
@@ -76,8 +89,18 @@ with psycopg.connect(
                 Label integer)
             """)
         
-        # Insert  Data
-        cur.execute(
-            "INSERT INTO mnist (Image, Label) VALUES (%s,%s)",
-            (image_bytes, label_data,))
-        
+        for img_bytes, label in zip(image_list, label_list):
+            cur.execute(
+                "INSERT INTO mnist (Image, Label) VALUES (%s, %s)",
+                (img_bytes, label)
+            )
+
+        cur.execute("SELECT Image, Label FROM mnist ORDER BY ID DESC LIMIT 1")
+        retrieved_bytes, retrieved_label = cur.fetchone()
+
+        print("Retrieved label:", retrieved_label)
+
+        img = Image.open(io.BytesIO(retrieved_bytes))
+        img.save("retrieved_image.png")
+        img = Image.open("retrieved_image.png")
+        img.show()
