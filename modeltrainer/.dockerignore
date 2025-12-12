@@ -1,0 +1,32 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Machine learning artifacts
+models/
+*.h5
+*.keras
+
+# Local data files
+data/
+
+# Reports and readme
+reports/
+README.md
+
+# Git
+.git/
+.gitignore
+
+# Docker files
+docker-compose.yml
+Dockerfile
+
+# local data files
