@@ -18,7 +18,7 @@ def connect_default_db():
 
 # Create database if it doesnt exist
 def create_database_if_not_exists():
-    db_name = os.getenv("DB_NAME")
+    db_name = os.getenv("DB_NAME", "dsta_ms3")
 
     with connect_default_db() as conn:
         with conn.cursor() as cur:
@@ -30,15 +30,15 @@ def create_database_if_not_exists():
 
             if not exists:
                 cur.execute(f"CREATE DATABASE {db_name};")
-                print(f"1. Database '{db_name}' created.")
+                print(f"1. Database '{db_name}' created")
             else:
-                print(f"1. Database '{db_name}' already exists.")
+                print(f"1. Database '{db_name}' already exists")
 
 
 # Connect to "ms3_mnist" database
 def connect_mnist_db():
     return psycopg.connect(
-        dbname=os.getenv("DB_NAME"), # ms3_mnist
+        dbname=os.getenv("DB_NAME", "dsta_ms3"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         host=os.getenv("DB_HOST"),
@@ -49,15 +49,17 @@ def connect_mnist_db():
 def init_table():
     with connect_mnist_db() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
+            cur.execute(
+                """
                 CREATE TABLE IF NOT EXISTS mnist (
                     id SERIAL PRIMARY KEY,
                     image BYTEA NOT NULL,
                     label INTEGER NOT NULL
                 );
-            """)
+                """
+            )
             conn.commit()
-            print("2. Table 'mnist' created (if not exists).")
+            print("2. Table 'mnist' created (if not exists)")
 
 
 def insert_samples(image_list, label_list):
@@ -113,6 +115,7 @@ for i in range(num_sample):
 
 
 # Execute
+db_name = os.getenv("DB_NAME", "dsta_ms3")
 create_database_if_not_exists()
 init_table()
 insert_samples(image_list, label_list)
