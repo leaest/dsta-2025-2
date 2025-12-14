@@ -30,11 +30,7 @@ We use the official PostgreSQL Docker image and customize it by exposing the sta
 
 Check if the container is running with `docker ps` --> `STATUS` --> "Up ... seconds" or check the container status through the Docker desktop applicaiton.
 
-For this project, we use Psycopg, the most popular PostgreSQL adapter for Python. Psycopg 3 is the latest version and recommended for new projects. Before installing Psycopg, the virtual environment should also be running. Install Psycopg and specify the version:
-`pip install --upgrade pip`
-`pip install "psycopg[binary]==3.3"`
-
-This installs a self-contained package with all necessary libraries for connecting to PostgreSQL.
+For this project, we use Psycopg, the most popular PostgreSQL adapter for Python. We install this via the `requirements.txt` file in the virtual environment.
 
 ### Python Jokes
 The code is divided into functions to improve modularity, readability, and reusability. Each function handles a specific task, making the code easier to understand and maintain.
