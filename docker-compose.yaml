@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ms3user
+      POSTGRES_PASSWORD: ms3password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+
+  trainer:
+    build: ./modeltrainer
+    volumes:
+      - model_data:/app/models
+
+  app:
+    build: ./app
+    depends_on:
+      - db
+      - trainer
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ms3user
+      DB_PASSWORD: ms3password
+      DB_NAME: db_milestone3
+    volumes:
+      - model_data:/app/models:ro
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8081:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+
+volumes:
+  db_data:
+  model_data:
+  pgadmin_data:
