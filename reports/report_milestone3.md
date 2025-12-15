@@ -60,8 +60,10 @@ NoSQL databases, on the other hand, provide flexible data models. They can store
 Although there is discussion about SQL vs. NoSQL approaches, PostgreSQL is fundamentally a relational database. It enforces schemas, stores structured data, and uses SQL for querying and data manipulation, making it a SQL (relational) database.
 
 ### PostgreSQL with Docker
-We use the official PostgreSQL Docker image and customize it by exposing the standard PostgreSQL port (5432) and specifying the current version of PostgreSQL. The resulting command takes the following form:
-`docker run --name postgres_name -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:18.1`
+We use the official PostgreSQL Docker image and customize it by exposing the standard PostgreSQL port and specifying the current version of PostgreSQL. The resulting command takes the following form:
+`docker run --name postgres_name -p 5433:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:18.1`
+
+Originally, both setups used port 5432. Since only one PostgreSQL container can bind to a specific port at a time, running the scripts from Task 2/3 and Task 4 would require stopping the currently running container and starting another one. This quickly becomes tedious so using different ports for the PostgreSQL containers avoids this issue and allows the scripts to be used more conveniently in parallel.
 
 Check if the container is running with `docker ps` --> `STATUS` --> "Up ... seconds" or check the container status through the Docker desktop applicaiton.
 
@@ -91,6 +93,7 @@ Once the container is running, we can open a browser and navigate to localhost:5
 
 **Connect PostgreSQL Database**
 To connect the PostgreSQL database in pgAdmin, we add a new server and fill out the following sections:
+
 <ins>General<ins>
 - Name: Choose any name to identify the server, for example `PostgreSQL DSTA`.
     
@@ -140,3 +143,7 @@ The code uses a function to select an observation in random order, which ensures
 Next, the MNIST dataset is loaded and prepared in the same way as in the previous milestones. As before, a small sample of 10 images is used. The code iterates over these samples, takes the images from the test dataset (using the training data would also be possible, as the data is not used further at this stage), and converts each image into bytes before storing it in the database.
 
 Finally, all functions are executed, resulting in status messages and the label of the retrieved image being printed. The image itself is saved as a PNG file and should theoretically open automatically. However, this step did not work because no image viewer is installed on the Linux system. Since we are not supposed to install additional packages with sudo rights, the image cannot be opened directly. Nevertheless, because the image is saved, it is still possible to access the Linux folder from the Windows interface and open the file manually to verify that the process worked correctly.
+
+## Taks 4
+** Entity Relationship Diagram
+![ERD Diagram](report_milestone3_erd.jpg)
