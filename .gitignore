@@ -218,6 +218,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Ignore saved ML models
+# ML models
 models/
 *.keras
+
+# Images
+ *.png

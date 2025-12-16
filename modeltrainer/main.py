@@ -1,3 +1,5 @@
+import os
+import sys
 import numpy as np
 
 from src.data_prep import load_data
@@ -5,6 +7,20 @@ from src.neuralnet_architecture import build_neuralnet
 from src.neuralnet_training import train_neuralnet, save_model
 from src.neuralnet_loading import load_trained_model
 from src.neuralnet_predicion import predict_sample
+
+MODEL_PATH = "/app/models/CNN_model.keras"   # match docker-compose volume
+
+
+# 1. Check if model already exists
+
+if os.path.exists(MODEL_PATH):
+    print(f"Model already exists at {MODEL_PATH}. Skipping training.")
+    model = load_trained_model(MODEL_PATH)
+    print("Model loaded successfully!")
+    sys.exit(0)  
+
+else:
+    print(f"No model found at {MODEL_PATH}. Training will start now.")
 
 
 # Load data
