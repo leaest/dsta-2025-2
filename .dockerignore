@@ -29,4 +29,6 @@ README.md
 docker-compose.yml
 Dockerfile
 
-# local data files
+# Images
+ *.png
+

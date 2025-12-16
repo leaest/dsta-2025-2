@@ -1,5 +1,11 @@
 # Milestone 3 Report
 
+## 0 - New Requirements
+|Package Name|Version|SHA-256|
+|---|---|---|
+|psycopg2-binary|2.9.9|ed1184ab8f113e8d660ce49a56390ca181f2981066acc27cf637d5c1e10ce46e|
+|pillow|10.3.0|b14f16f94cbc61215115b9b1236f9c18403c15dd3c52cf629072afa9d54c1cbf|
+
 ## 1 - Docker-Compose
 If for Docker the Docker-Desktop app was installed, no installation of docker compose is necessary, since this service is included in the Docker-Desktop app.
 
@@ -29,7 +35,7 @@ On the other hand, in the `compose.yaml` file the port of the web service are ma
 ### Local Host
 `localhost` is the hostname that is mapped to the own computer, it is basically the host name for the home IP address `127.0.0.1`. When opening the `http://localhost/` the browser is not connecting to the internet but to the own device.
 
-This enables developers to test web servers and other applications locally and therefor eliminating the need exposing any ports to the internet. Moreover, as seen above, `localhost` works great with Docker since it allows to access containers through exposed ports.
+This enables developers to test web servers and other applications locally and therefore eliminating the need exposing any ports to the internet. Moreover, as seen above, `localhost` works great with Docker since it allows to access containers through exposed ports.
 
 The localhost also works from inside containers, since these act as "mini-computers". So when you are inside a docker container, the `localhost` refers to that container itself.
 
@@ -144,7 +150,7 @@ The code uses a function to select an observation in random order, which ensures
 
 Next, the MNIST dataset is loaded and prepared in the same way as in the previous milestones. As before, a small sample of 10 images is used. The code iterates over these samples, takes the images from the test dataset (using the training data would also be possible, as the data is not used further at this stage), and converts each image into bytes before storing it in the database.
 
-Finally, all functions are executed, resulting in status messages and the label of the retrieved image being printed. The image itself is saved as a PNG file and should theoretically open automatically. However, this step did not work because no image viewer is installed on the Linux system. Since we are not supposed to install additional packages with sudo rights, the image cannot be opened directly. We also tried to open it via `matplotlip` but this was unsuccessful as well. Nevertheless, because the image is saved, it is still possible to access the Linux folder from the Windows interface and open the file manually to verify that the process worked correctly.
+Finally, all functions are executed, resulting in status messages and the label of the retrieved image being printed. The image itself is saved as a PNG file and should theoretically open automatically. However, this step did not work because no image viewer is installed on the Linux system. Since we are not supposed to install additional packages with sudo rights, the image cannot be opened directly. We also tried to open it via `matplotlib` but this was unsuccessful as well. Nevertheless, because the image is saved, it is still possible to access the Linux folder from the Windows interface and open the file manually to verify that the process worked correctly.
 
 ## 4 - Multi-Docker Container
 In Task 4 we combined the container that trained our model with various other services with the goal of having a reproducible, containerized machine learning system in which a dedicated training container that produces a model stored in a persistent model. The second container uses that model for inference, and one of the predictions is stored in a PostgreSQL database, and it is linked via a foreign key to the corresponding input image that was used for inference. The foreign key is a mechanism in a relational database that creates a logical link between two tables, ensuring that related data stays consistent. The database can be accessed through pgAdmin.
@@ -164,7 +170,7 @@ This condition only checks whether the dependent container has started (i.e. the
 It does not guarantee that the service inside the container is ready to accept connections.
 
 **service_healthy**
-This condition ensures that the container that it depends on not only is running but it also excepts outside request. This is done with a health check, which sends a request to said container.
+This condition ensures that the container that it depends on not only is running but it also accepts outside request. This is done with a health check, which sends a request to said container.
 A service is considered healthy only if a health check is defined and that health check is passed.
 
 **service_completed_successfully**
@@ -207,4 +213,3 @@ It is useful for containers that only need to be run once, such as model trainin
 **Results** 
 The following Entity-Relationship Diagram (ERD) shows the structure of our PostgreSQL database. It includes two main tables: input_data and predictions. The predictions table stores the results of the model inference and includes a foreign key referencing input_data to link each prediction to the corresponding input image.
 ![ERD Diagram](report_milestone3_erd.jpg)
-

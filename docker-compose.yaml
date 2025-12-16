@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:18.1
     environment:
       POSTGRES_USER: ms3user
       POSTGRES_PASSWORD: ms3password
