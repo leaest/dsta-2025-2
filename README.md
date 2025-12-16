@@ -32,7 +32,7 @@ If you want to recreate everything from scratch (including the volumes) use:
 
 **pgAdmin**
 View your Database via pgAdmin:
-1. Once the Docker container is running open pgAdmin in your browser: [http://localhost:8081]
+1. Once the Docker container is running, open pgAdmin in your browser: [http://localhost:8081](http://localhost:8081)
 2. Log in:<br>- Email: `admin@example.com`<br>- Password: `admin`
 3. Add a new server:<br>- Host: `db`<br>- Port: `5432`<br>- Username: `ms3user`<br>- Password: `ms3password`
 4. On the left side follow `db_milestone3` --> `Schemas` --> `Tables`
