@@ -9,6 +9,12 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
   trainer:
     build: ./modeltrainer
@@ -18,8 +24,10 @@ services:
   app:
     build: ./app
     depends_on:
-      - db
-      - trainer
+      db:
+        condition: service_healthy
+      trainer:
+        condition: service_completed_successfully
     environment:
       DB_HOST: db
       DB_PORT: 5432

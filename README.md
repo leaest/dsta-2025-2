@@ -22,3 +22,10 @@ If you instead prefer to run the code through Docker, which ensures that it will
 Inside the github repo run the following codes_
 - `docker build -t dsta-ms2 .` to build the image
 - `docker run --rm dsta-ms2` to run said docker container
+
+## Docker compose
+To run the entire service created by the docker-compose file run the command:
+`docker compose up` 
+To force it to recreate the images you can use: `docker compose up --build` 
+If you want to recreate everything from scratch (including the volumes) use:
+`docker compose down -v` followed by `docker compose up`.
