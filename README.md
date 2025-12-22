@@ -37,3 +37,10 @@ View your Database via pgAdmin:
 3. Add a new server:<br>- Host: `db`<br>- Port: `5432`<br>- Username: `ms3user`<br>- Password: `ms3password`
 4. On the left side follow `db_milestone3` --> `Schemas` --> `Tables`
 5. Rightclick any table and select `View/Edit Data` to see its contents
+
+**Using W&B**
+1. Create a account for W&B[https://wandb.ai/login]
+2. Inside the folder "modeltrainer" create a env-file that contains the following script:
+`WANDB_TOKEN=YOUR_PERSONAL_API_KEY`
+3. Build the docker container with the command: `docker build -t milestone4-modeltrainer .`
+4. Run the Docker image with the following command: `docker run --env-file .env milestone4-modeltrainer`
