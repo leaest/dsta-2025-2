@@ -5,7 +5,7 @@ import numpy as np
 
 # To be able to use W&B we need wandb library and functions from wandb.keras
 import wandb
-from wandb.keras import WandbMetricsLogger, WandbModelCheckpoint
+from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
 
 # Import from src
 from src.data_prep import load_data

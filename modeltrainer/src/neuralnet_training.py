@@ -1,5 +1,5 @@
 #Library for w&b logging
-from wandb.keras import WandbMetricsLogger
+from wandb.integration.keras import WandbMetricsLogger
 
 
 def train_neuralnet(model, x_train, y_train, batch_size, epochs, optimizer, loss, metrics):
