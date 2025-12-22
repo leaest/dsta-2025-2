@@ -30,8 +30,8 @@ wandb.init(
         "dropout": 0.3,
         "layer_2": 10,
         "activation_2": "softmax",
-        "optimizer": "sgd",
-        "loss": "sparse_categorical_crossentropy",
+        "optimizer": "adam",
+        "loss": "categorical_crossentropy",
         "metric": "accuracy",
         "epochs": 8,
         "batch_size": 256
