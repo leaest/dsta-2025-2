@@ -10,6 +10,62 @@
 |matplotlib|3.10.8|ee40c27c795bda6a5292e9cff9890189d32f7e3a0bf04e0e3c9430c4a00c37df|
 |pandas|2.3.3|dd7478f1463441ae4ca7308a70e90b33470fa593429f9d4c578dd00d1fa78838|
 
+## 1 - Theory
+**Experiment Management**
+In the context of machine learning, the term experiment management refers to the process of tracking and organizing experiment metadata, which can then be accessed and shared within a team. This metadata typically includes code and data versions, hyperparameters, environment configurations, and performance metrics.
+
+Experiment management allows us to share and reproduce results. It also ensures that long-running experiments are saved and documented. Overall, it is important because we want to track changes and understand why a model performs better or worse than another.
+
+**Metrics**
+Metrics are used to monitor and measure the performance of a model. They vary depending on the type of model, e.g., classification or regression. Choosing the correct metric for each task is crucial, otherwise, the results may not accurately reflect the model’s true performance.
+
+**Confusion Matrix**
+The confusion matrix summarizes classification performance by comparing predicted and actual class labels. It highlights where a model is making mistakes and provides a basis for calculating key metrics such as precision and recall.
+
+|  |Predicted Positive|Predicted Negative|
+|---|---|---|
+|**Actual Positive**|True Positive (TP)|False Negative (FN)|
+|**Actual Negative**|False Positive (FP)|True Negative (TN)|
+
+**Precision and Recall**
+Using the confusion matrix, we can calculate precision and recall:
+
+*Precision* describes the proportion of predicted positive instances that are actually positive. It is defined as:
+$$
+\text{Precision} = \frac{\text{correctly classified actual positives}}{\text{everything classified as positives}} = \frac{\text{TP}}{\text{TP + FP}}
+$$
+
+This concept can be easily illustrated using the spam-mail analogy:
+$$
+\text{Precision} = \frac{\text{number of emails correctly predicted as spam}}{\text{total number of emails predicted as spam}}
+$$
+
+Precision measures how many of the predicted positive instances are correct, minimizing false positives.
+___
+*Recall* (or true positive rate) describes the proportion of actual positive instances that are correctly identified. It is defined as:
+$$
+\text{Recall} = \frac{\text{correctly classified actual positives}}{\text{all actual positives}} = \frac{\text{TP}}{\text{TP + FN}}
+$$
+
+Using the spam-mail analogy:
+$$
+\text{Recall} = \frac{\text{number of emails correctly predicted as spam}}{\text{total number of actual spam emails}}
+$$
+
+Recall measures how many of the actual positive instances are identified correctly, minimizing false negatives.
+___
+
+Although precision and recall may seem similar, there is a **critical trade-off** between them. Raising the classification threshold usually decreases false positives but increases false negatives. As a result, precision and recall often have an inverse relationship. Depending on the costs, benefits, and risks associated with false positives and false negatives, one metric may be prioritized over the other.
+
+**AUROC**
+AUROC (Area Under the Receiver Operating Characteristic Curve) is a widely used metric for binary classification tasks. The ROC curve plots the false positive rate (FPR) on the x-axis and the true positive rate (TPR) on the y-axis for different classification thresholds. AUROC measures the area under this curve.
+
+Interpretation:
+- 0.5: The model performs no better than random guessing
+- 1.0: The model perfectly separates positive and negative classes
+
+AUROC evaluates how well a model can distinguish positive from negative samples across all possible thresholds, providing a threshold-independent measure of performance.
+
 ## Task 2
 We reused the Docker container that we created in milestone 2 and extended it with experiment tracking via Weights & Biases. Therefor, all the changes to the code only concern files in the folder "modeltrainer".
 
