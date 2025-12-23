@@ -67,7 +67,7 @@ Interpretation:
 AUROC evaluates how well a model can distinguish positive from negative samples across all possible thresholds, providing a threshold-independent measure of performance.
 
 ## Task 2
-We reused the Docker container that we created in milestone 2 and extended it with experiment tracking via Weights & Biases. Therefor, all the changes to the code only concern files in the folder "modeltrainer".
+We reused the Docker container that we created in milestone 2 and extended it with experiment tracking via Weights & Biases. Therefore, all the changes to the code only concern files in the folder "modeltrainer".
 
 **Pyhton Code Changes**
 In the `main.py` a new codeblock was added, in which the hyperparameters for the model training process are defined. This configuration includs all relevant paramenters, such as:
@@ -79,7 +79,7 @@ In the `main.py` a new codeblock was added, in which the hyperparameters for the
 
 Training and validation metrics are logged using the official W&B Keras integration. Since the newer packages use a different import call: `wandb.integration.keras` as noted in their updated documentation[https://docs.wandb.ai/models/integrations/keras?utm_source=chatgpt.com]
 
-Furthermore, it was necessary to adjust the `neuralnet_training.py`. On the one hand a argument to log the metrics (`callbacks=[WandbMetricsLogger()]`) was added in the `model.fit()`-function. On the other hand the code was changed so that now all hyperparameters are  defined in the Weights & Biases configuration in the `main.py` and are passed directly to the training. This ensures consistency and makes it easier to play around with the hyperparameters.
+Furthermore, it was necessary to adjust the `neuralnet_training.py`. On the one hand a argument to log the metrics (`callbacks=[WandbMetricsLogger()]`) was added in the `model.fit()`-function. On the other hand the code was changed so that now all hyperparameters are defined in the Weights & Biases configuration in the `main.py` and are passed directly to the training. This ensures consistency and makes it easier to play around with the hyperparameters.
 
 Lastly, a code snipped was added that saves the predictions from the model of a run to a csv-file and automatically uploads it to W&B.
 
@@ -105,7 +105,14 @@ To run the docker image, the usage of the env-file must be explicitly stated by 
 **Different Runs**
 To test different hyperparameters, the image must be newly created and the container newly run every time.
 
-The results of the training run can be inspected under the the project (DSTA-2025)[https://wandb.ai/dsta-2025/milestone4_modeltrainer]
+The results of the training run can be inspected under the the project [DSTA-2025](https://wandb.ai/dsta-2025/milestone4_modeltrainer). The menu point "epoch" shows you the loss and accuracy for each epoch.
+
+Training and validation loss (`epoch/loss` & `epoch/val_loss`) for each experiment are shown graphically. While `loss` describes how well the model fits the training data, we are more interested in the `validation loss`, which indicates how well the model generalizes to unseen data.
+
+The two curves should be similar and decreasing over epochs, which suggests that the model is learning effectively. If only the training loss decreases while the validation loss remains high or increases, this is a sign of overfitting.
+
+You can also observe the metric `epoch/val_accuracy`, which shows the model's performance on unseen data. The interpretation is similar to that of the loss curves: accuracy should increase over epochs for both training and validation sets. If training accuracy increases but validation accuracy stagnates or decreases, it indicates overfitting.
+
 
 ## Task 3
 The Jupyter notebook is stored in the folder "notebooks". To use Jupyter Notes the package jupyter had to be installed. Since we are not allowed to use sudo, the virtual environment created a the very beginning had to be started with the regular command: `source .venv/bin/activate`. Then, all the required packages (matplotlib) could be installed. I created a `requirements-jupyter.txt` file with the `pip freeze` command inside the notebooks folder, since these libraries are not required for the docker images, they are however, to successfully look at the jupyter notebook.
