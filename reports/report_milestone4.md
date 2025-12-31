@@ -113,6 +113,39 @@ The two curves should be similar and decreasing over epochs, which suggests that
 
 You can also observe the metric `epoch/val_accuracy`, which shows the model's performance on unseen data. The interpretation is similar to that of the loss curves: accuracy should increase over epochs for both training and validation sets. If training accuracy increases but validation accuracy stagnates or decreases, it indicates overfitting.
 
+**Change Hyperparameters**
+In W&B the menu point “epoch” shows you the loss and accuracy for each epoch.
+
+Training and validation loss (`epoch/loss` & `epoch/val_loss`) for each experiment are shown graphically. While `loss` describes how well the model fits the training data, we are more interested in the `validation loss`, which indicates how well the model generalizes to unseen data.
+
+The two curves should be similar and decreasing over epochs, which suggests that the model is learning effectively. If only the training loss decreases while the validation loss remains high or increases, this is a sign of overfitting.
+
+You can also observe the metric `epoch/val_accuracy`, which shows the model’s performance on unseen data. The interpretation is similar to that of the loss curves: accuracy should increase over epochs for both training and validation sets. If training accuracy increases but validation accuracy stagnates or decreases, it indicates overfitting.
+
+Although we could theoretically experiment with every parameter there are some we avoid changing if we wanted to optimize our model:
+- `layer_2 = 10`: Output layer size should match the number of classes
+- `activation_2 = "softmax"`: Needed for multi-class classification. Outputs probabilities for each class which sum up to 1.
+- ` loss = "categorical_crossentropy"`: Has to match `activation_2` and label encoding. Standard for multi-class calssificaiton.
+
+In the following you are able to compare the default settings of our model to a hand ful of changes we tested:
+
+| Parameter    | Default Settings         | Run 1   | Run 2 | Run 3 | Run 4   |
+| ------------ | ------------------------ | ------- | ----- | ----- | ------- |
+| layer_1      | 512                      | -       | -     | -     | 256     |
+| activation_1 | relu                     | -       | -     | -     | -       |
+| dropout      | 0.3                      | -       | 0.5   | -     | -       |
+| layer_2      | 10                       | -       | -     | -     | -       |
+| activation_2 | softmax                  | -       | -     | -     | -       |
+| optimizer    | adam                     | rmsprop | -     | sgd   | rmsprop |
+| loss         | categorical_crossentropy | -       | -     | -     | -       |
+| metric       | accuracy                 | -       | -     | -     | -       |
+| epochs       | 8                        | 16      | -     | -     | -       |
+| batch_size   | 256                      | -       | -     | -     | 128     |
+| **test_accuracy**| **0.989**            | **0.9912**| **0.9878**| **0.948** | **0.990**   |
+| **test_loss**    | **0.033**            | **0.025** | **0.036** | **0.190** | **0.032**   |
+
+While `test_accuracy` measures how often predictions are correct, `test_loss` additionally reflects how well-calibrated these predictions are. We can see that `test_accuracy` values above 99 % are relatively easy to achieve without extensively adapting the model parameters. This indicates that the default configuration of the model is already very strong and that further optimization in terms of accuracy alone is likely to yield only marginal improvements. Nevertheless, the observed differences in `test_loss` suggest that the models do not all arrive at the same confidence in their predictions. In particular, run 3 shows a noticeably higher loss despite only a marginal decrease in accuracy, which implies that the model still predicts most classes correctly but does so with lower confidence or higher uncertainty.
+Overall, this comparison demonstrates the importance of tracking multiple metrics when evaluating and comparing different training configurations.
 
 ## Task 3
 The Jupyter notebook is stored in the folder "notebooks". To use Jupyter Notes the package jupyter had to be installed. Since we are not allowed to use sudo, the virtual environment created a the very beginning had to be started with the regular command: `source .venv/bin/activate`. Then, all the required packages (matplotlib) could be installed. I created a `requirements-jupyter.txt` file with the `pip freeze` command inside the notebooks folder, since these libraries are not required for the docker images, they are however, to successfully look at the jupyter notebook.
