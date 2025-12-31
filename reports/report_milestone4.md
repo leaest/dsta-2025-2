@@ -6,8 +6,9 @@
 |Package Name|Version|SHA-256|
 |---|---|---|
 |wandb|0.23.1|67431cd3168d79fdb803e503bd669c577872ffd5dadfa86de733b3274b93088e|
-|jupyter|1.1.1|...|
-|matplotlib|3.10.8|...|
+|jupyter|1.1.1|7a59533c22af65439b24bbe60373a4e95af8f16ac65a6c00820ad378e3f7cc83|
+|matplotlib|3.10.8|ee40c27c795bda6a5292e9cff9890189d32f7e3a0bf04e0e3c9430c4a00c37df|
+|pandas|2.3.3|dd7478f1463441ae4ca7308a70e90b33470fa593429f9d4c578dd00d1fa78838|
 
 ## Task 2
 We reused the Docker container that we created in milestone 2 and extended it with experiment tracking via Weights & Biases. Therefor, all the changes to the code only concern files in the folder "modeltrainer".
@@ -23,6 +24,8 @@ In the `main.py` a new codeblock was added, in which the hyperparameters for the
 Training and validation metrics are logged using the official W&B Keras integration. Since the newer packages use a different import call: `wandb.integration.keras` as noted in their updated documentation[https://docs.wandb.ai/models/integrations/keras?utm_source=chatgpt.com]
 
 Furthermore, it was necessary to adjust the `neuralnet_training.py`. On the one hand a argument to log the metrics (`callbacks=[WandbMetricsLogger()]`) was added in the `model.fit()`-function. On the other hand the code was changed so that now all hyperparameters are  defined in the Weights & Biases configuration in the `main.py` and are passed directly to the training. This ensures consistency and makes it easier to play around with the hyperparameters.
+
+Lastly, a code snipped was added that saves the predictions from the model of a run to a csv-file and automatically uploads it to W&B.
 
 **Login settings**
 To ensure that the login credentials remain secret but still work with the `Dockerfile` several steps were necessary.
@@ -49,12 +52,15 @@ To test different hyperparameters, the image must be newly created and the conta
 The results of the training run can be inspected under the the project (DSTA-2025)[https://wandb.ai/dsta-2025/milestone4_modeltrainer]
 
 ## Task 3
-The Jupyter notebook is stored in the folder "notebooks". To use Jupyter Notes the package jupyter had to be installed. Since we are not allowed to use sudo, the virtual environment created a the very beginning had to be started with the regular command: `source .venv/bin/activate`. Then, all the required packages (matplotlib) could be installed. I created a `requirements.jupyter.txt` file with the `pip freeze` command inside the notebooks folder, since these libraries are not required for the docker images, they are however, to successfully look at the jupyter notebook.
+The Jupyter notebook is stored in the folder "notebooks". To use Jupyter Notes the package jupyter had to be installed. Since we are not allowed to use sudo, the virtual environment created a the very beginning had to be started with the regular command: `source .venv/bin/activate`. Then, all the required packages (matplotlib) could be installed. I created a `requirements-jupyter.txt` file with the `pip freeze` command inside the notebooks folder, since these libraries are not required for the docker images, they are however, to successfully look at the jupyter notebook.
 After having started the virtual environment and installed all packages the jupyter server can be started with the command `jupyter notebook`. The server should start up and provide a link that will open the local server in the browser. It is usually something similar to: `http://localhost:8888/...`.
 Then a new notebook can be created or one that already exists can be opened up. Inside the notebook there are two types of cells, code-cells that contain runable code and markdown-cells that can be styled with markdown syntax.
 
 In the notebook Milestone4.ipynb the first block imported the python libraries that were required. In the second code cell the MINST data was loaded, using the keras function.
 Code cell three and four contain python code that create plots. The first plot shows the distribution of digits across the entire training dataset. The second plot shows how an average figure of each digit would look like.
+
+In the second chapter in the Jupyter Notebook the predictions and the ground-of-truth data is downloaded from a specific W&B run (sweet-shape21)[https://wandb.ai/dsta-2025/milestone4_modeltrainer/runs/803djk5d]. I chose this model simply because it was the first that offered a clean downloadable prediction dataset. The model was then analyzed with a confusion matrix.
+In order for anyone else to use the Jupyter Notebook, they must have an account at W&B and then follow the prompts inside the notebook, in order to download the prediction data and run the analysis.
 
 
 **Version Control Jupyter Notebooks**
