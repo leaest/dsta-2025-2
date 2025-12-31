@@ -1,7 +1,13 @@
+# Import libraries to train the model
 import os
 import sys
 import numpy as np
 
+# To be able to use W&B we need wandb library and functions from wandb.keras
+import wandb
+from wandb.integration.keras import WandbMetricsLogger, WandbModelCheckpoint
+
+# Import from src
 from src.data_prep import load_data
 from src.neuralnet_architecture import build_neuralnet
 from src.neuralnet_training import train_neuralnet, save_model
@@ -10,8 +16,32 @@ from src.neuralnet_predicion import predict_sample
 
 MODEL_PATH = "/app/models/CNN_model.keras"   # match docker-compose volume
 
+# Start a run, tracking hyperparameters
+wandb.init(
+    # set the wandb project where this run will be logged
+    project="milestone4_modeltrainer",
+    entity="DSTA-2025",
 
-# 1. Check if model already exists
+
+    # track hyperparameters and run metadata with wandb.config
+    config={
+        "layer_1": 512,
+        "activation_1": "relu",
+        "dropout": 0.3,
+        "layer_2": 10,
+        "activation_2": "softmax",
+        "optimizer": "adam",
+        "loss": "categorical_crossentropy",
+        "metric": "accuracy",
+        "epochs": 8,
+        "batch_size": 256
+    }
+)
+
+# [optional] use wandb.config as your config
+config = wandb.config
+
+# Check if model already exists
 
 if os.path.exists(MODEL_PATH):
     print(f"Model already exists at {MODEL_PATH}. Skipping training.")
@@ -37,7 +67,16 @@ model.summary()
 
 
 # Train model
-model = train_neuralnet(model, x_train, y_train)
+model = train_neuralnet(
+    model,
+    x_train,
+    y_train,
+    batch_size=config.batch_size,
+    epochs=config.epochs,
+    optimizer=config.optimizer,
+    loss=config.loss,
+    metrics=[config.metric]
+)
 print("Model trained successfully!")
 
 
@@ -45,6 +84,12 @@ print("Model trained successfully!")
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0])
 print("Test accuracy:", score[1])
+
+# Log metrics to w&b
+wandb.log({
+    "test_loss": score[0],
+    "test_accuracy": score[1]
+})
 
 
 # Save model
@@ -65,3 +110,20 @@ pred_class, true_class = predict_sample(model, x_test[:10], y_test[:10])
 table = np.column_stack((pred_class, true_class))
 print("Pred.  True")
 print(table)
+
+# Save predictions to file
+y_pred = np.argmax(model.predict(x_test), axis=1)
+y_true = np.argmax(y_test, axis=1)
+
+np.savetxt(
+    "predictions.csv",
+    np.column_stack((y_true, y_pred)),
+    delimiter=",",
+    header="true_label,predicted_label",
+    fmt="%d",
+    comments=""
+)
+
+# Upload file to W&B
+wandb.save("predictions.csv")
+wandb.finish()

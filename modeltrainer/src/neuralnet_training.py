@@ -1,15 +1,27 @@
-def train_neuralnet(model, x_train, y_train, batch_size=128, epochs=15):
+#Library for w&b logging
+from wandb.integration.keras import WandbMetricsLogger
+
+
+def train_neuralnet(model, x_train, y_train, batch_size, epochs, optimizer, loss, metrics):
     model.compile(
-        loss="categorical_crossentropy",
-        optimizer="adam",
-        metrics=["accuracy"]
+        loss=loss,
+        optimizer=optimizer,
+        metrics=metrics
     )
+
+# model.compile(
+#     loss="categorical_crossentropy",
+#     optimizer="adam",
+#     metrics=["accuracy"]
+# )
+
     model.fit(
         x_train, 
         y_train, 
         batch_size=batch_size, 
         epochs=epochs, 
-        validation_split=0.1
+        validation_split=0.1,
+        callbacks=[WandbMetricsLogger()] #this logs the metrics
     )
     return model
 
