@@ -117,7 +117,7 @@ Although we could theoretically experiment with every parameter there are some w
 - `activation_2 = "softmax"`: Needed for multi-class classification. Outputs probabilities for each class which sum up to 1.
 - ` loss = "categorical_crossentropy"`: Has to match `activation_2` and label encoding. Standard for multi-class calssificaiton.
 
-In the following you are able to compare the default settings of our model to a hand ful of changes we tested:
+As mentioned earlier, we only need to change the `main.py` file if we want to change the parameters. In the following you are able to compare the default settings of our model to a hand ful of changes we tested:
 
 | Parameter    | Default Settings         | Run 1   | Run 2 | Run 3 | Run 4   |
 | ------------ | ------------------------ | ------- | ----- | ----- | ------- |
