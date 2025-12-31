@@ -111,4 +111,10 @@ table = np.column_stack((pred_class, true_class))
 print("Pred.  True")
 print(table)
 
+# Save predictions to file
+y_pred = np.argmax(model.predict(x_test), axis=1)
+np.savetxt("predictions.csv", np.column_stack((y_test, y_pred)), delimiter=",", header="true,pred", comments="")
+
+# Upload file to W&B
+wandb.save("predictions.csv")
 wandb.finish()
