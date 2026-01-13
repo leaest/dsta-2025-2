@@ -1,6 +1,13 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import os
+import json
+
+# Load config form JSON (saved outside of app hence this path)
+with open(os.path.join(os.path.dirname(__file__), '../config.json'), 'r') as f:
+    config = json.load(f)
+
+db_config = config['postgres']
 
 def connect_default_db():
     """Connect to the default 'postgres' database to create new DBs."""
@@ -33,13 +40,13 @@ def create_database_if_not_exists():
 
 
 def connect_milestone_db():
-    """Connect to db_milestone3."""
+    """Connect to db_milestone5"""
     return psycopg2.connect(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
-        dbname=os.getenv("DB_NAME")  # now db_milestone3
+        dbname=os.getenv("DB_NAME")
     )
 
 
@@ -65,3 +72,22 @@ def init_tables():
     conn.commit()
     cur.close()
     conn.close()
+
+# Write function
+def write_to_db(query, params=None):
+    conn = connect_milestone_db()
+    cur = conn.cursor()
+    cur.execute(query, params)
+    conn.commit()
+    cur.close()
+    conn.close()
+
+# Read function
+def read_from_db(query, params=None):
+    conn = connect_milestone_db()
+    cur = conn.cursor()
+    cur.execute(query, params)
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+    return result
