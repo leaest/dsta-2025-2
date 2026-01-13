@@ -11,7 +11,6 @@ from .src.model_utils import load_model
 
 app = Flask(__name__)
 
-
 # Load configuration form JSON file
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config.json')
 with open(CONFIG_PATH, "r") as f:
@@ -40,7 +39,10 @@ print("Model loaded!")
 # Flask application
 @app.route("/")
 def home():
-    return '<h1>Welcome to our App!<h1>'
+    return '''
+    <h1>Welcome to our App!<h1>
+    <h2>Available routes: /read and /predict<h2>
+    '''
 
 ## Retrieves data form the PostgreSQL database (not sure if we need this and if JSON format is the right choice)
 @app.route('/read', methods=['GET'])
@@ -84,4 +86,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-# deebug=True enables auto-reload (disable for production)
+# debug=True enables auto-reload (disable for production)

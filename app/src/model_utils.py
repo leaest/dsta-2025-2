@@ -1,10 +1,6 @@
 import tensorflow as tf
-
-MODEL_PATH = "/app/models/CNN_model.keras"
-
 import time
 import os
-import tensorflow as tf
 
 MODEL_PATH = "/app/models/CNN_model.keras"
 
@@ -19,4 +15,3 @@ def load_model():
     model = tf.keras.models.load_model(MODEL_PATH)
     print("Model loaded successfully!")
     return model
-
