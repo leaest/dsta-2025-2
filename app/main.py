@@ -23,8 +23,12 @@ model = load_model()
 @app.route("/")
 def home():
     return '''
-    <h1>Welcome to our App!<h1>
-    <h2>Available routes: /read and /predict<h2>
+    <h1>Welcome to our App!</h1>
+    <h2>The Website to upload an image would be here</h2>
+     <ul>
+        <li>POST /predict - Submit an image for classification</li>
+        <li>GET /read - View recent predictions</li>
+    </ul>
     '''
 
 ## Retrieves data form the PostgreSQL database (not sure if we need this and if JSON format is the right choice)

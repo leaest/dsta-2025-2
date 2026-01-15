@@ -7,46 +7,45 @@
 
 
 ## 1 - Flask Application
-### Notes so far
-**config.json**
-We can use a JSON file to pass the Postgres database detail to the APi. It has the following structure:
-  {
-    "postgres": {
-      "DB_HOST": "localhost",
-      "DB_PORT": 5432,
-      "DB_NAME": "dsta_ms5",
-      "DB_USER": "user",
-      "DB_PASSWORD": "password",
-      "DB_TABLE": "mnist"
-    }
-  }
-If we use this approach we need to include it into the .gitignore (havent done so, just didn't push it)
-
 **main.py**
-This document is used to create the Flask applicatoin.
+This document is used to create the Flask application.
 
-At the beginning the databse and application configuration is loaded from the JSON file followed by database-related setitngs. We use the formulas defined in `db_utils` o initialize the DB table. Then we try to loads the model if it exists in the specified path.
+At the beginning the database and application configuration is loaded We use the formulas defined in `db_utils.py` to initialize the DB table. The formula for creating the database and the initialization are exactly the same as in milestone 3. This means there is a table for the input data and a separate table for the prediction.
+Also like in milestone 3, the model was loaded with the function defined in `model_utils.py`.
 
-Root: Landing endpoint so see if the API is running
-Read: Retrieves all rows form the DB table and returns them as JSON
-Prediciton: Allows clients to send data to be inserted into the database. Image(s) are decoded and processed to be predicted. The last step stores the raw image bytes, true and predicted label.
+After these first apps, the flask application was created.
+The first function 
+The root displays a welcome page:
+```python
+@app.route("/")
+def home():
+    return '''
+    <h1>Welcome to our App!</h1>
+    <h2>The Website to upload an image would be here</h2>
+    '''
+```
+defines the html that is returned when someone visits the [root]http://localhost:5000/ of the flask application.
 
-The last step is the application entry point which starts the Flask development server. `0.0.0.0` allows the access from outside the machine (for docker i think?).
+The second function `read()` uses a GET request, in which it sends a request to the API, that then tries to output the last predictions made from the database. 
 
-**db_utils.py**
-The code is the same for the most part. Bigger changes regard the JSON configuration at the beginning and the two new funcitons at the end. The funcitons help to better communicate with the database and are used in the `main.py` file.
+The third function, is the function that is most important for this task and it does several things.
+**Error Message**
+If the provided data is not a pictures, it prints a error message.
 
-(Used this tutorial and tried to adapt it to our code (https://medium.com/@sijomthomas05/creating-a-restful-api-using-flask-and-postgresql-27c04103d52b))
+**Image Decoding**
+If the posted data is indeed a image, it first saves the "image"-data from HTTP-Body that was "transmitted". The base64 format is then converted into binary code. Since the model was trained on a deserialized image, this conversion must take place. However, since our image is stored in a binary format now, a new function was added to `image_utils.py`, which is able to convert the binary format to a numpy array. The 2D array from the function is then reshaped into the 4D array (1, 28, 28, 1).
 
+**Database**
+This array is then passed to the trained model and defines stores the prediction (with the highest probability).
+It then creates a connection to the Postgres Database based on with the functions from `db_utils.py`.
+It then inserts the image (in binary format) into the input_data table, the input_id is a auto-generated id (to connect the tables). In the second table this input_id and the predicted label are stored. Then the prediction is returned.
+
+**Port- and Host-Settings**
+The last step is the application entry point which starts the Flask development server. `0.0.0.0` allows the access from outside the container by making Flask listen on all network interfaces and not just the container's local host. The port defines to which port the Flask application is mapped to inside the container.
+If only the port mapping was configured and not the host, it would only listen on the internal port. When our computers would try to "talk" to the container, Flask will only be listening to internal port-requests and the connection would be refused because then Docker can't forward it (Docker always forwards to the external port), on which without `0.0.0.0` won't be listening.
 
 
 ### REST Endpoint
 **Expose**
 
 **Accept POST Request**
-
-### Send Image
-
-### Accept Image
-
-### Return Prediction
