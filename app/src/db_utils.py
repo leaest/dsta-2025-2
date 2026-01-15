@@ -3,11 +3,6 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import os
 import json
 
-# Load config form JSON (saved outside of app hence this path)
-with open(os.path.join(os.path.dirname(__file__), '../config.json'), 'r') as f:
-    config = json.load(f)
-
-db_config = config['postgres']
 
 def connect_default_db():
     """Connect to the default 'postgres' database to create new DBs."""
