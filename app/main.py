@@ -31,7 +31,7 @@ def home():
     </ul>
     '''
 
-## Retrieves data form the PostgreSQL database (not sure if we need this and if JSON format is the right choice)
+## Retrieves data form the PostgreSQL database
 @app.route('/read', methods=['GET'])
 def read():
     """Get recent predictions"""
