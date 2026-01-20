@@ -44,3 +44,9 @@ View your Database via pgAdmin:
 `WANDB_TOKEN=YOUR_PERSONAL_API_KEY`
 3. Build the docker container with the command: `docker build -t milestone4-modeltrainer .`
 4. Run the Docker image with the following command: `docker run --env-file .env milestone4-modeltrainer`
+
+**Flask Application**
+1. Follow the steps above (*Docker compose*) to start the Docker containers
+2. Run the test script: `python test_imageupload.py`
+
+The Flask API is now available under [http://localhost:5000](http://localhost:5000)

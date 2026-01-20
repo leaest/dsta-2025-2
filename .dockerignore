@@ -32,3 +32,5 @@ Dockerfile
 # Images
  *.png
 
+# Test Python code
+test_imageupload.py

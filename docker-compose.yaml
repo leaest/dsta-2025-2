@@ -2,8 +2,8 @@ services:
   db:
     image: postgres:18.1
     environment:
-      POSTGRES_USER: ms3user
-      POSTGRES_PASSWORD: ms3password
+      POSTGRES_USER: ms5user
+      POSTGRES_PASSWORD: ms5password
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
@@ -18,6 +18,8 @@ services:
 
   trainer:
     build: ./modeltrainer
+    env_file:
+      - ./modeltrainer/.env
     volumes:
       - model_data:/app/models
 
@@ -31,9 +33,11 @@ services:
     environment:
       DB_HOST: db
       DB_PORT: 5432
-      DB_USER: ms3user
-      DB_PASSWORD: ms3password
-      DB_NAME: db_milestone3
+      DB_USER: ms5user
+      DB_PASSWORD: ms5password
+      DB_NAME: db_milestone5
+    ports:
+      - 5000:5000  
     volumes:
       - model_data:/app/models:ro
 
